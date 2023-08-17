@@ -1,5 +1,5 @@
 {
-  "name": "cb2-devkit",
+  "name": "cb2-base64",
   "version": "1.0.0",
   "description": "Develop, test, and compile apps for the Chaturbate App v2 platform, all locally.",
   "main": "index.js",
@@ -45,5 +45,8 @@
         "src/": "test/"
       }
     }
+  },
+  "dependencies": {
+    "terser": "^5.19.2"
   }
 }

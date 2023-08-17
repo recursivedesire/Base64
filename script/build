@@ -24,5 +24,12 @@ files=(
     "userFollow"
     "userLeave"
     "userUnfollow"
+    "Base64"
 )
 printf "src/%s.ts\n" "${files[@]}" | xargs npx babel --out-dir dist --extensions '.ts'
+
+# Delete empty files from the dist folder
+find dist/ -type f -empty -delete
+
+# Create a minified version of the library
+npx terser dist/Base64.js -o dist/Base64.min.js -c drop_debugger,keep_fargs,sequences -m keep_classnames,keep_fnames
