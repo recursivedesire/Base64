@@ -9,7 +9,35 @@ import {$room} from "./api/$room";
 import {$tip} from "./api/$tip";
 import {$user} from "./api/$user";
 import {$settings} from "./api/$settings";
+import {Base64} from "./Base64";
 
+function saveKV(prefix?: string): string {
+    if (prefix === "") prefix = undefined;
 
+    const data: Record<string, any> = {};
+    const iter = $kv.iter(prefix);
+    while (iter.next()) {
+        data[iter.key()] = iter.value();
+    }
 
-export {$callback, $kv, $limitcam, $room};
+    const json = JSON.stringify({prefix, data});
+    return Base64.encode(json);
+}
+
+function loadKV(base64: string): number {
+    const json = Base64.decode(base64);
+
+    const {prefix, data} = JSON.parse(json);
+    const iter = $kv.iter(prefix);
+    while (iter.next()) {
+        iter.delete();
+    }
+
+    for (const [key, value] of Object.entries(data)) {
+        $kv.set(key, value);
+    }
+
+    return Object.keys(data).length;
+}
+
+export {Base64, loadKV, saveKV};
